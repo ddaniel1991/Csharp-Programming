@@ -1,0 +1,79 @@
+using System;
+using static System.Console;
+using System.Globalization;
+class SalesTaxDemo
+{
+   static void Main()
+   {
+    // Write your main here.
+    int x;
+    Sale[] sales = new Sale[10];
+
+    for(x = 0; x < sales.Length; ++x)
+    {
+      string number;
+      double amount;
+      Write("Enter inventory number #{0} >> ", x+1);
+      number = ReadLine();
+      Write("Enter amount of sale >> ");
+      amount = Convert.ToDouble(ReadLine());
+      sales[x] = new Sale(number, amount);
+    }
+
+    for(x = 0; x < sales.Length; ++x)
+    {
+      sales[x].DisplayInfo(x+1);
+    }
+
+   }
+}
+class Sale
+{    
+    // Write your Sale class here.
+    private string inventoryNumber;
+    private double amount;
+    private double tax;
+
+    public string InventoryNumber {get{return inventoryNumber;} set {inventoryNumber = value;}}
+    public double Amount {get{return amount;} set{amount = value;}}
+    public double Tax {get{return CalculateTax();}}
+
+    public Sale()
+    {
+      inventoryNumber = "";
+      amount = 0;
+    }
+
+    public Sale(string inventoryNum, double saleAmount)
+    {
+      inventoryNumber = inventoryNum;
+      amount = saleAmount;
+      tax = CalculateTax();
+    }
+
+
+    public void DisplayInfo(int num)
+    {
+      WriteLine("Sale # {0} Amount: {1} Sale {2}", num, this.InventoryNumber, this.Amount.ToString("C", CultureInfo.GetCultureInfo("en-US")));
+      WriteLine("     Tax is {0}", this.Tax.ToString("C", CultureInfo.GetCultureInfo("en-US")));
+    }
+
+
+    private double CalculateTax()
+    {
+      // Write your CalculateTax method here.
+      const int RATE_CHANGE = 100;
+      const double HIGH_TAX = .08;
+      const double LOW_TAX = .06;
+
+      if(amount > RATE_CHANGE)
+      {
+        double over = amount - RATE_CHANGE;
+        return (RATE_CHANGE * HIGH_TAX) + (over * LOW_TAX);
+      }
+      else
+      {
+        return amount * HIGH_TAX;
+      }
+    }
+}
